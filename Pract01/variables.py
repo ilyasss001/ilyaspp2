@@ -20,3 +20,22 @@ print(type(y))
 a = 4
 A = "Sally"
 #A will not overwrite a
+#6
+x = "Python"
+y = "is"
+z = "awesome"
+print(x, y, z)
+#7
+x = 5
+y = 10
+print(x + y)
+#8
+x = "awesome"
+
+def myfunc():
+  x = "fantastic"
+  print("Python is " + x)
+
+myfunc()
+
+print("Python is " + x)
