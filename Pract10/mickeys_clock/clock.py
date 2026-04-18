@@ -6,6 +6,7 @@ import pygame.math
 
 class MickeyClock:
     def __init__(self, base_path):
+
         # загрузка изображений
         self.clock_img = pygame.image.load(os.path.join(base_path, 'clock.png')).convert_alpha()
         self.mickey = pygame.image.load(os.path.join(base_path, 'mUmrP.png')).convert_alpha()
@@ -13,11 +14,11 @@ class MickeyClock:
         self.hand_r = pygame.image.load(os.path.join(base_path, 'hand_right.png')).convert_alpha()
 
         # размеры
-        self.clock_img = pygame.transform.scale(self.clock_img, (800, 600))
-        self.mickey = pygame.transform.scale(self.mickey, (220, 220))
+        self.clock_img = pygame.transform.scale(self.clock_img, (600, 600))
+        self.mickey = pygame.transform.scale(self.mickey, (420, 310))
 
-        self.hand_l = pygame.transform.scale(self.hand_l, (120, 260))
-        self.hand_r = pygame.transform.scale(self.hand_r, (120, 260))
+        self.hand_l = pygame.transform.scale(self.hand_l, (145, 235))
+        self.hand_r = pygame.transform.scale(self.hand_r, (145, 235))
 
     def rotate(self, image, angle, pivot, offset):
         rotated_image = pygame.transform.rotate(image, angle)
@@ -40,33 +41,31 @@ class MickeyClock:
         return seconds_angle, minutes_angle
 
     def draw(self, screen):
-        # 🔥 центр экрана (автоматически)
-        screen_rect = screen.get_rect()
-        center = screen_rect.center
 
-        # фон часов
+        # центр экрана
+        center = screen.get_rect().center
+
+        # рисуем часы (фон)
         clock_rect = self.clock_img.get_rect(center=center)
         screen.blit(self.clock_img, clock_rect)
 
-        # время
+        # получаем углы
         seconds_angle, minutes_angle = self.get_angles()
 
-        # 🔥 точка вращения (чуть ниже центра = плечи)
-        pivot = (center[0], center[1] + 15)
+        pivot = center
 
-        # 🔥 offset (настроены под твою картинку)
-        sec_offset = pygame.math.Vector2(0, -95)   # секундная ближе к телу
-        min_offset = pygame.math.Vector2(0, -105)
+        # смещение (подогнано)
+        sec_offset = pygame.math.Vector2(0, -85)
+        min_offset = pygame.math.Vector2(0, -80)
 
-        # 🔥 поменяли руки местами правильно
+        # вращаем
         min_img, min_rect = self.rotate(self.hand_l, minutes_angle, pivot, min_offset)
         sec_img, sec_rect = self.rotate(self.hand_r, seconds_angle, pivot, sec_offset)
 
-        # порядок слоёв
-        screen.blit(min_img, min_rect)
-
-        # микки чуть ниже центра
-        mic_rect = self.mickey.get_rect(center=(center[0], center[1] + 30))
+        # 🔥 СНАЧАЛА МИККИ
+        mic_rect = self.mickey.get_rect(center=center)
         screen.blit(self.mickey, mic_rect)
 
+        # 🔥 ПОТОМ РУКИ (они будут поверх)
+        screen.blit(min_img, min_rect)
         screen.blit(sec_img, sec_rect)
