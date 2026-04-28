@@ -1,4 +1,0 @@
-Hello
-This is first line
-New line 1
-New line 2
