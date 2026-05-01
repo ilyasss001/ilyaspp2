@@ -3,6 +3,7 @@ import math
 from collections import deque
 
 
+# Flood fill tool: fills connected area with selected color
 def flood_fill(surface, start_pos, fill_color):
     width, height = surface.get_size()
     x, y = start_pos
@@ -35,6 +36,7 @@ def flood_fill(surface, start_pos, fill_color):
         queue.append((x, y - 1))
 
 
+# Draws a square with equal width and height
 def draw_square(surface, color, start_pos, end_pos, thickness):
     x1, y1 = start_pos
     x2, y2 = end_pos
@@ -51,6 +53,7 @@ def draw_square(surface, color, start_pos, end_pos, thickness):
     pygame.draw.rect(surface, color, rect, thickness)
 
 
+# Draws a right triangle from mouse drag positions
 def draw_right_triangle(surface, color, start_pos, end_pos, thickness):
     x1, y1 = start_pos
     x2, y2 = end_pos
@@ -64,6 +67,7 @@ def draw_right_triangle(surface, color, start_pos, end_pos, thickness):
     pygame.draw.polygon(surface, color, points, thickness)
 
 
+# Draws an equilateral triangle using side length and height formula
 def draw_equilateral_triangle(surface, color, start_pos, end_pos, thickness):
     x1, y1 = start_pos
     x2, y2 = end_pos
@@ -90,6 +94,7 @@ def draw_equilateral_triangle(surface, color, start_pos, end_pos, thickness):
     pygame.draw.polygon(surface, color, [p1, p2, p3], thickness)
 
 
+# Draws a rhombus using four points around the center
 def draw_rhombus(surface, color, start_pos, end_pos, thickness):
     x1, y1 = start_pos
     x2, y2 = end_pos

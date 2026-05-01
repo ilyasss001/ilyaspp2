@@ -78,6 +78,7 @@ def add_button(name, rect, action_type, value):
     })
 
 
+# Creates toolbar buttons: tools, brush sizes, colors, save and clear
 def create_buttons():
     buttons.clear()
 
@@ -139,6 +140,7 @@ def create_buttons():
     add_button("Clear", (890, 10, 80, 25), "clear", None)
 
 
+# Saves current canvas as PNG file
 def save_canvas():
     global save_message_time
 
@@ -150,6 +152,7 @@ def save_canvas():
     print("Saved:", filename)
 
 
+# Draws final shapes after mouse release and preview shapes while dragging
 def draw_shape(surface, current_mode, start, end):
     x1, y1 = start
     x2, y2 = end
@@ -185,6 +188,7 @@ def draw_shape(surface, current_mode, start, end):
         draw_rhombus(surface, color, start, end, brush_size)
 
 
+# Draws top toolbar and highlights selected tool, size and color
 def draw_toolbar():
     mouse_pos = pygame.mouse.get_pos()
 
@@ -235,6 +239,7 @@ def draw_toolbar():
         screen.blit(saved_text, (800, 55))
 
 
+# Changes current tool, brush size, color or performs save/clear
 def handle_button_click(pos):
     global mode, color, brush_size
 
@@ -263,13 +268,12 @@ create_buttons()
 
 running = True
 
+# Main loop: draws screen and handles events
 while running:
     screen.fill((230, 230, 230))
 
-    # Draw canvas
     screen.blit(canvas, (0, TOOLBAR_HEIGHT))
 
-    # Canvas border
     pygame.draw.rect(
         screen,
         BORDER,
@@ -284,6 +288,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        # Handles keyboard shortcuts, Ctrl+S and text input
         if event.type == pygame.KEYDOWN:
             keys = pygame.key.get_pressed()
 
@@ -349,6 +354,7 @@ while running:
                 if event.key == pygame.K_w:
                     color = WHITE
 
+        # Handles mouse click: toolbar, fill tool, text tool, or drawing start
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.pos[1] < TOOLBAR_HEIGHT:
                 handle_button_click(event.pos)
@@ -368,6 +374,7 @@ while running:
                     text_value = ""
                     drawing = False
 
+        # Draws pencil and eraser continuously while mouse moves
         if event.type == pygame.MOUSEMOTION:
             if drawing and is_on_canvas(event.pos):
                 current_pos = canvas_pos(event.pos)
@@ -380,6 +387,7 @@ while running:
                     pygame.draw.line(canvas, WHITE, last_pos, current_pos, brush_size)
                     last_pos = current_pos
 
+        # Draws shape when mouse button is released
         if event.type == pygame.MOUSEBUTTONUP:
             if drawing and start_pos is not None and is_on_canvas(event.pos):
                 end_pos = canvas_pos(event.pos)
@@ -399,7 +407,7 @@ while running:
             start_pos = None
             last_pos = None
 
-    # Live preview for shapes
+    # Shows live shape preview before final drawing
     if drawing and start_pos is not None and is_on_canvas(mouse_pos):
         preview_pos = canvas_pos(mouse_pos)
 
@@ -416,7 +424,7 @@ while running:
             draw_shape(preview_surface, mode, start_pos, preview_pos)
             screen.blit(preview_surface, (0, TOOLBAR_HEIGHT))
 
-    # Text preview + blinking cursor
+    # Shows text before pressing Enter
     if text_mode:
         preview_text = text_font.render(text_value, True, color)
 
